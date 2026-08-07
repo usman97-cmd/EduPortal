@@ -1,0 +1,222 @@
+﻿@model IEnumerable<Student>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+                <h3 class="m-0">Student Management</h3>
+            </div>
+
+            <div class="col-sm-6 text-end">
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>
+                    Add Student
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card shadow">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    Student List
+                </h3>
+            </div>
+
+            <div class="card-body table-responsive">
+
+                <table class="table table-bordered table-hover table-striped align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>Photo</th>
+
+                            <th>Registration No</th>
+
+                            <th>Student Name</th>
+
+                            <th>Email</th>
+
+                            <th>Phone</th>
+
+                            <th>Department</th>
+
+                            <th>Status</th>
+
+                            <th width="180">Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <img src="@item.Photo"
+                                             width="50"
+                                             height="50"
+                                             class="rounded-circle border" />
+
+                                    </td>
+
+                                    <td>
+
+                                        @item.RegistrationNo
+
+                                    </td>
+
+                                    <td>
+
+                                        @item.FirstName @item.LastName
+
+                                    </td>
+
+                                    <td>
+
+                                        @item.Email
+
+                                    </td>
+
+                                    <td>
+
+                                        @item.Phone
+
+                                    </td>
+
+                                    <td>
+
+                                        @item.Department.Name
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.IsActive)
+                                        {
+                                            <span class="badge bg-success">
+                                                Active
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                Inactive
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm delete-btn"
+                                                data-id="@item.Id">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-danger btn-sm">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="8" class="text-center text-danger">
+
+                                    No Students Found
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+@section Scripts
+{
+    <script>
+
+        const buttons = document.querySelectorAll(".delete-btn");
+
+        buttons.forEach(button => {
+
+            button.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                const id = this.dataset.id;
+
+                fetch("/Student/Delete?id=" + id, {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    if (data.success) {
+
+                        alert(data.message);
+
+                        this.closest("tr").remove();
+
+                    }
+                    else {
+
+                        alert(data.message);
+
+                    }
+
+                })
+                .catch(error => {
+
+                    console.log(error);
+
+                    alert("Something went wrong.");
+
+                });
+
+            });
+
+        });
+
+    </script>
+}

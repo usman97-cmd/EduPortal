@@ -1,0 +1,152 @@
+﻿@model List<Student_Mangement_System.Models.Department>
+
+@{
+    ViewData["Title"] = "Departments";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+                <h3 class="m-0">Departments</h3>
+            </div>
+
+            <div class="col-sm-6 text-end">
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>
+                    Add Department
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card shadow-sm">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    Department List
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-bordered table-hover table-striped">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width:80px">ID</th>
+                            <th>Department Name</th>
+                            <th style="width:180px">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@item.Id</td>
+
+                                    <td>@item.Name</td>
+
+                                    <td>
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-warning btn-sm">
+
+                                            <i class="bi bi-pencil-square"></i>
+
+                                        </a>
+
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm delete-btn"
+                                                data-id="@item.Id">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="3" class="text-center text-muted">
+                                    No Departments Found
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+@section Scripts
+{
+    <script>
+
+        const buttons = document.querySelectorAll(".delete-btn");
+
+        buttons.forEach(button => {
+
+            button.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                const id = this.dataset.id;
+
+                fetch("/Department/Delete?id=" + id, {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    if (data.success) {
+
+                        alert(data.message);
+                        this.closest("tr").remove();
+
+                    }
+                    else {
+
+                        alert(data.message);
+
+                    }
+
+                })
+                .catch(error => {
+
+                    console.log(error);
+
+                    alert("Something went wrong.");
+                });
+
+            });
+
+        });
+
+    </script>
+}

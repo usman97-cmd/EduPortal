@@ -1,0 +1,154 @@
+﻿@model IEnumerable<Teacher>
+
+@{
+    ViewData["Title"] = "Teachers";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+                <h3>Teachers</h3>
+            </div>
+
+            <div class="col-sm-6 text-end">
+
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>
+                    Add Teacher
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card shadow">
+
+            <div class="card-header">
+                <h3 class="card-title">Teacher List</h3>
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-bordered table-hover">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Department</th>
+                            <th width="180">Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var teacher in Model)
+                        {
+                            <tr>
+
+                                <td>@teacher.Id</td>
+
+                                <td>@teacher.Name</td>
+
+                                <td>@teacher.Email</td>
+
+                                <td>@teacher.Phone</td>
+
+                                <td>@teacher.Department.Name</td>
+
+                                <td>
+
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm delete-btn"
+                                            data-id="@teacher.Id">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@teacher.Id"
+                                       class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+@section Scripts
+{
+    <script>
+
+        const buttons = document.querySelectorAll(".delete-btn");
+
+        buttons.forEach(button => {
+
+            button.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                const id = this.dataset.id;
+
+                fetch("/Teacher/Delete?id=" + id, {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    if (data.success) {
+
+                        alert(data.message);
+
+                        this.closest("tr").remove();
+
+                    }
+                    else {
+
+                        alert(data.message);
+
+                    }
+
+                })
+                .catch(error => {
+
+                    console.log(error);
+
+                    alert("Something went wrong.");
+
+                });
+
+            });
+
+        });
+
+    </script>
+}
