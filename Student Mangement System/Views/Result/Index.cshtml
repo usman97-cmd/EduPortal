@@ -1,0 +1,129 @@
+﻿@model List<Student_Mangement_System.Models.Result>
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<div class="row mb-3">
+
+    <div class="col-sm-6">
+        <h3 class="m-0">Results</h3>
+    </div>
+
+    <div class="col-sm-6 text-end">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Add Result
+        </a>
+    </div>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-header">
+        <h3 class="card-title">
+            Result List
+        </h3>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover table-striped">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th style="width:70px">ID</th>
+                    <th>Student</th>
+                    <th>Course</th>
+                    <th>Mid Marks</th>
+                    <th>Final Marks</th>
+                    <th>Total Marks</th>
+                    <th>Grade</th>
+                    <th style="width:180px">Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var result in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @result.Id
+                            </td>
+
+                            <td>
+                                @result.Student.FirstName
+                                @result.Student.LastName
+                            </td>
+
+                            <td>
+                                @result.Course.CourseName
+                            </td>
+
+                            <td>
+                                @result.MidMarks
+                            </td>
+
+                            <td>
+                                @result.FinalMarks
+                            </td>
+
+                            <td>
+                                @result.TotalMarks
+                            </td>
+
+                            <td>
+                                @result.Grade
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@result.Id"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="bi bi-pencil-square"></i>
+
+                                </a>
+
+                                <button type="button"
+                                        class="btn btn-danger btn-sm delete-btn"
+                                        data-id="@result.Id">
+
+                                    <i class="bi bi-trash"></i>
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="8"
+                            class="text-center text-muted">
+
+                            No Results Found
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
