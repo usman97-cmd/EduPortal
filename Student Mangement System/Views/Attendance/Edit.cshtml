@@ -1,0 +1,169 @@
+﻿@model Student_Mangement_System.Models.Attendance
+
+@{
+    ViewData["Title"] = "Edit Attendance";
+}
+
+<div class="row mb-3">
+
+    <div class="col-sm-6">
+        <h3 class="m-0">Edit Attendance</h3>
+    </div>
+
+    <div class="col-sm-6 text-end">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-header">
+        <h3 class="card-title">
+            Edit Attendance Information
+        </h3>
+    </div>
+
+    <div class="card-body">
+
+        <form asp-action="Edit" method="post">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            <!-- Student -->
+
+            <div class="mb-3">
+
+                <label asp-for="StudentId"
+                       class="form-label">
+                    Student
+                </label>
+
+                <select asp-for="StudentId"
+                        class="form-select"
+                        asp-items="ViewBag.Students">
+
+                    <option value="">
+                        -- Select Student --
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="StudentId"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- Course -->
+
+            <div class="mb-3">
+
+                <label asp-for="CourseId"
+                       class="form-label">
+                    Course
+                </label>
+
+                <select asp-for="CourseId"
+                        class="form-select"
+                        asp-items="ViewBag.Courses">
+
+                    <option value="">
+                        -- Select Course --
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="CourseId"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- Attendance Date -->
+
+            <div class="mb-3">
+
+                <label asp-for="AttendanceDate"
+                       class="form-label">
+                    Attendance Date
+                </label>
+
+                <input asp-for="AttendanceDate"
+                       class="form-control"
+                       type="date" />
+
+                <span asp-validation-for="AttendanceDate"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- Status -->
+
+            <div class="mb-3">
+
+                <label asp-for="IsPresent"
+                       class="form-label">
+                    Attendance Status
+                </label>
+
+                <select asp-for="IsPresent"
+                        class="form-select">
+
+                    <option value="true">
+                        Present
+                    </option>
+
+                    <option value="false">
+                        Absent
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="IsPresent"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <div class="text-end">
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="bi bi-check-circle"></i>
+                    Update Attendance
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

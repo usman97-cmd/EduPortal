@@ -127,3 +127,37 @@
     </div>
 
 </div>
+@section Scripts {
+    <script>
+        const buttons = document.querySelectorAll(".delete-btn");
+        buttons.forEach(button =>{
+            button.addEventListener("click",function(event){
+                event.preventDefault();
+                const id = this.dataset.id;
+                fetch("/Result/DeleteConfirmed?id=" + id,{
+                    method : "DELETE"
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    if (data.success) {
+                        alert(data.message);
+                        this.closest("tr").remove();
+                    }
+
+                    else {
+
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+
+                    console.log(error);
+
+                    alert("Something went wrong.");
+                });
+            });
+        });
+
+    </script>
+}

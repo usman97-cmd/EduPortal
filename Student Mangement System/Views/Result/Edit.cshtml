@@ -127,7 +127,9 @@
                 <input asp-for="TotalMarks"
                        class="form-control"
                        type="number"
-                       step="0.01" />
+                       placeholder="Grade"
+                       step="0.01" 
+                       readonly/>
 
                 <span asp-validation-for="TotalMarks"
                       class="text-danger">
@@ -144,7 +146,8 @@
 
                 <input asp-for="Grade"
                        class="form-control"
-                       placeholder="Enter grade" />
+                       placeholder="Grade"
+                        readonly/>
 
                 <span asp-validation-for="Grade"
                       class="text-danger">
@@ -177,6 +180,42 @@
 
 @section Scripts
 {
+    <script>
+        const midMarks = document.getElementById("MidMarks");
+        const finalMarks = document.getElementById("FinalMarks");
+        const totalMarks = document.getElementById("TotalMarks");
+        const grade = document.getElementById("Grade");
+
+        function calculateResult() {
+
+            const total =
+                Number(midMarks.value) + Number(finalMarks.value);
+
+            totalMarks.value = total;
+
+            if (total >= 90) {
+                grade.value = "A+";
+            }
+            else if (total >= 80) {
+                grade.value = "A";
+            }
+            else if (total >= 70) {
+                grade.value = "B";
+            }
+            else if (total >= 60) {
+                grade.value = "C";
+            }
+            else if (total >= 50) {
+                grade.value = "D";
+            }
+            else {
+                grade.value = "F";
+            }
+        }
+
+        midMarks.addEventListener("input", calculateResult);
+        finalMarks.addEventListener("input", calculateResult);
+    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

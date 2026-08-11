@@ -19,12 +19,13 @@ namespace Student_Mangement_System.Controllers
         }
         public IActionResult Create ()
         {
-            ViewBag.Students = new SelectList(
+            ViewBag.Student = new SelectList(
                  context.Students,
                  "Id",
                  "FirstName"
+                 
             );
-            ViewBag.Courses = new SelectList(
+            ViewBag.Course = new SelectList(
                 context.Courses,
                 "Id",
                "CourseName"
@@ -35,21 +36,49 @@ namespace Student_Mangement_System.Controllers
         [HttpPost]
         public IActionResult Create (Result result)
         {
+            result.TotalMarks = result.MidMarks + result.FinalMarks;
+            if (result.TotalMarks >= 90)
+            {
+                result.Grade = "A+";
+            }
+            else if (result.TotalMarks >= 80)
+            {
+                result.Grade = "A";
+            }
+            else if (result.TotalMarks >= 70)
+            {
+                result.Grade = "B";
+            }
+            else if (result.TotalMarks >= 60)
+            {
+                result.Grade = "C";
+            }
+            else if (result.TotalMarks >= 50)
+            {
+                result.Grade = "D";
+            }
+            else
+            {
+                result.Grade = "F";
+            }
             if (ModelState.IsValid)
             {
                 context.Results.Add(result);
                 context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Students = new SelectList(
+            ViewBag.Student = new SelectList(
                 context.Students,
                 "Id",
-                "FirstName"
+                "FirstName",
+                 result.StudentId
+
            );
-            ViewBag.Courses = new SelectList(
+            ViewBag.Course = new SelectList(
                 context.Courses,
                 "Id",
-               "CourseName"
+               "CourseName",
+                result.CourseId
            );
             return View (result);
         }
@@ -77,6 +106,31 @@ namespace Student_Mangement_System.Controllers
         [HttpPost]
         public IActionResult Edit(Result result)
         {
+            result.TotalMarks = result.MidMarks + result.FinalMarks;
+            if (result.TotalMarks >= 90)
+            {
+                result.Grade = "A+";
+            }
+            else if (result.TotalMarks >= 80)
+            {
+                result.Grade = "A";
+            }
+            else if (result.TotalMarks >= 70)
+            {
+                result.Grade = "B";
+            }
+            else if (result.TotalMarks >= 60)
+            {
+                result.Grade = "C";
+            }
+            else if (result.TotalMarks >= 50)
+            {
+                result.Grade = "D";
+            }
+            else
+            {
+                result.Grade = "F";
+            }
             if (ModelState.IsValid)
             {
                 context.Results.Update(result);
@@ -85,14 +139,14 @@ namespace Student_Mangement_System.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Students = new SelectList(
+            ViewBag.Student = new SelectList(
                 context.Students,
                 "Id",
                 "FirstName",
                 result.StudentId
             );
 
-            ViewBag.Courses = new SelectList(
+            ViewBag.Course = new SelectList(
                 context.Courses,
                 "Id",
                 "CourseName",
@@ -102,7 +156,7 @@ namespace Student_Mangement_System.Controllers
             return View(result);
         }
         [HttpDelete]
-        public IActionResult DeleteConfirmed (int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             var result = context.Results.Find( id);
             if (result == null) {

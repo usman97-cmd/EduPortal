@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Student_Mangement_System.Migrations;
 using Student_Mangement_System.Models;
 
 namespace Student_Mangement_System.Data
@@ -36,6 +38,18 @@ namespace Student_Mangement_System.Data
                 .HasOne(r => r.Course)
                 .WithMany(c => c.Results)
                 .HasForeignKey(r => r.CourseId)
+                .OnDelete(DeleteBehavior.NoAction);
+            // Attendance
+            modelBuilder.Entity<Attendance>()
+                .HasOne(a => a.Student)
+                .WithMany(s => s.Attendances)
+                .HasForeignKey(a => a.StudentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Attendance>()
+                .HasOne(a => a.Course)
+                .WithMany()
+                .HasForeignKey(a => a.CourseId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Decimal Precision
