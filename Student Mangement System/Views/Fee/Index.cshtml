@@ -1,29 +1,30 @@
-﻿@model List<Student_Mangement_System.Models.Attendance>
+﻿@model List<Student_Mangement_System.Models.Fee>
 
 @{
-    ViewData["Title"] = "Attendance";
+    ViewData["Title"] = "Fees";
 }
 
 <div class="row mb-3">
 
     <div class="col-sm-6">
-        <h3 class="m-0">Attendance</h3>
+        <h3 class="m-0">Fees</h3>
     </div>
 
     <div class="col-sm-6 text-end">
         <a asp-action="Create" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i>
-            Mark Attendance
+            Add Fee
         </a>
     </div>
 
 </div>
 
+
 <div class="card shadow-sm">
 
     <div class="card-header">
         <h3 class="card-title">
-            Attendance List
+            Fee List
         </h3>
     </div>
 
@@ -34,69 +35,115 @@
             <thead class="table-dark">
 
                 <tr>
-                    <th style="width:80px">ID</th>
-                    <th>Student</th>
-                    <th>Course</th>
-                    <th>Attendance Date</th>
-                    <th>Status</th>
-                    <th style="width:120px">Actions</th>
+
+                    <th style="width:80px">
+                        ID
+                    </th>
+
+                    <th>
+                        Student
+                    </th>
+
+                    <th>
+                        Amount
+                    </th>
+
+                    <th>
+                        Due Date
+                    </th>
+
+                    <th>
+                        Paid Date
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th style="width:120px">
+                        Actions
+                    </th>
+
                 </tr>
 
             </thead>
+
 
             <tbody>
 
                 @if (Model != null && Model.Any())
                 {
-                    @foreach (var attendance in Model)
+                    @foreach (var fee in Model)
                     {
                         <tr>
 
                             <td>
-                                @attendance.Id
+                                @fee.Id
                             </td>
 
-                            <td>
-                                @attendance.Student.FirstName
-                                @attendance.Student.LastName
-                            </td>
 
                             <td>
-                                @attendance.Course.CourseName
+                                @fee.Student.FirstName
+                                @fee.Student.LastName
                             </td>
 
-                            <td>
-                                @attendance.AttendanceDate.ToString("dd-MM-yyyy")
-                            </td>
 
                             <td>
-                                @if (attendance.IsPresent)
+                                @fee.Amount.ToString("N2")
+                            </td>
+
+
+                            <td>
+                                @fee.DueDate.ToString("dd-MM-yyyy")
+                            </td>
+
+
+                            <td>
+                                @if (fee.PaidDate.HasValue)
+                                {
+                                    @fee.PaidDate.Value.ToString("dd-MM-yyyy")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Not Paid
+                                    </span>
+                                }
+                            </td>
+
+
+                            <td>
+
+                                @if (fee.IsPaid)
                                 {
                                     <span class="badge bg-success">
-                                        Present
+                                        Paid
                                     </span>
                                 }
                                 else
                                 {
                                     <span class="badge bg-danger">
-                                        Absent
+                                        Unpaid
                                     </span>
                                 }
+
                             </td>
+
 
                             <td>
 
                                 <a asp-action="Edit"
-                                   asp-route-id="@attendance.Id"
+                                   asp-route-id="@fee.Id"
                                    class="btn btn-warning btn-sm">
 
                                     <i class="bi bi-pencil-square"></i>
 
                                 </a>
 
+
                                 <button type="button"
                                         class="btn btn-danger btn-sm delete-btn"
-                                        data-id="@attendance.Id">
+                                        data-id="@fee.Id">
 
                                     <i class="bi bi-trash"></i>
 
@@ -111,10 +158,10 @@
                 {
                     <tr>
 
-                        <td colspan="6"
+                        <td colspan="7"
                             class="text-center text-muted">
 
-                            No Attendance Records Found
+                            No Fee Records Found
 
                         </td>
 
@@ -128,10 +175,8 @@
     </div>
 
 </div>
-@section Scripts
-{
+@section Scripts {
     <script>
-
         const buttons = document.querySelectorAll(".delete-btn");
 
         buttons.forEach(button => {
@@ -142,7 +187,7 @@
 
                 const id = this.dataset.id;
 
-                fetch("/Attendance/Delete?id=" + id, {
+                fetch("/Fee/Delete?id=" + id, {
                     method: "DELETE"
                 })
                 .then(response => response.json())
@@ -173,6 +218,5 @@
             });
 
         });
-
     </script>
 }

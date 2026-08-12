@@ -1,0 +1,468 @@
+﻿@model Student_Mangement_System.ViewModels.ReportViewModel
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<style>
+    .report-card {
+        background-color: #1f2327;
+        border: 1px solid #343a40;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .report-card .card-header {
+            background-color: #292e33;
+            color: #f8f9fa;
+            border-bottom: 1px solid #343a40;
+        }
+
+        .report-card .card-body {
+            background-color: #1f2327;
+        }
+
+        .report-card .table {
+            color: #f8f9fa;
+            margin-bottom: 0;
+        }
+
+            .report-card .table thead {
+                background-color: #343a40;
+            }
+
+                .report-card .table thead th {
+                    color: #ffffff;
+                    border-bottom: 1px solid #495057;
+                }
+
+            .report-card .table tbody td {
+                border-color: #343a40;
+            }
+
+        .report-card .table-hover tbody tr:hover {
+            background-color: #292e33;
+        }
+
+    .student-badge {
+        background-color: #f8f9fa;
+        color: #212529;
+        border: 1px solid #dee2e6;
+        padding: 6px 10px;
+        border-radius: 6px;
+        display: inline-block;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        font-size: 13px;
+    }
+
+    .report-title {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+        color: #adb5bd;
+    }
+
+        .empty-state i {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+</style>
+
+
+<div class="container-fluid">
+    <div class="row mb-4">
+
+        <div class="col-md-8">
+
+            <h2 class="fw-bold mb-1">
+                Reports
+            </h2>
+
+            <p class="text-muted mb-0">
+                Student and course enrollment overview
+            </p>
+
+        </div>
+
+    </div>
+    <div class="row mb-4">
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted mb-2">
+                                Departments
+                            </h6>
+
+                            <h3 class="fw-bold mb-0">
+                                @Model.DepartmentReport.Count
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-building fs-1 text-primary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted mb-2">
+                                Total Students
+                            </h6>
+
+                            <h3 class="fw-bold mb-0">
+
+                                @Model.DepartmentReport.Sum(x => x.StudentCount)
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-people fs-1 text-success"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h6 class="text-muted mb-2">
+                                Courses
+                            </h6>
+
+                            <h3 class="fw-bold mb-0">
+
+                                @Model.CourseReport.Count
+
+                            </h3>
+
+                        </div>
+
+                        <i class="bi bi-book fs-1 text-warning"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm mb-4 report-card">
+
+        <div class="card-header py-3">
+
+            <h5 class="mb-0 report-title">
+
+                <i class="bi bi-building me-2 text-primary"></i>
+
+                Department-wise Student Report
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+
+            @if (Model.DepartmentReport != null &&
+                 Model.DepartmentReport.Any())
+            {
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width:80px;">
+                                    #
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th>
+                                    Student Count
+                                </th>
+
+                                <th>
+                                    Students
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @{
+
+                                int departmentNumber = 1;
+
+                            }
+
+
+                            @foreach (var department in Model.DepartmentReport)
+                            {
+
+                                <tr>
+
+                                    <td>
+
+                                        @departmentNumber
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="fw-semibold">
+
+                                            @department.DepartmentName
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge bg-primary">
+
+                                            @department.StudentCount
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (department.StudentNames != null &&
+                                             department.StudentNames.Any())
+                                        {
+
+                                            @foreach (var student in department.StudentNames)
+                                            {
+
+                                                <span class="student-badge">
+
+                                                    @student
+
+                                                </span>
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+
+                                            <span class="text-muted">
+
+                                                No students
+
+                                            </span>
+
+                                        }
+
+                                    </td>
+
+
+                                </tr>
+
+
+                                departmentNumber++;
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            }
+            else
+            {
+
+                <div class="empty-state">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    <p class="mb-0">
+
+                        No department report data available.
+
+                    </p>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm mb-4 report-card">
+
+        <div class="card-header py-3">
+
+            <h5 class="mb-0 report-title">
+
+                <i class="bi bi-book me-2 text-warning"></i>
+
+                Course-wise Enrollment Report
+
+            </h5>
+
+        </div>
+        <div class="card-body">
+
+
+            @if (Model.CourseReport != null &&
+                 Model.CourseReport.Any())
+            {
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width:80px;">
+                                    #
+                                </th>
+
+                                <th>
+                                    Course
+                                </th>
+
+                                <th>
+                                    Enrollment Count
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @{
+
+                                int courseNumber = 1;
+
+                            }
+
+
+                            @foreach (var course in Model.CourseReport)
+                            {
+
+                                <tr>
+
+                                    <td>
+
+                                        @courseNumber
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="fw-semibold">
+
+                                            @course.CourseName
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge bg-success">
+
+                                            @course.EnrollmentCount
+
+                                        </span>
+
+                                    </td>
+
+
+                                </tr>
+
+
+                                courseNumber++;
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            }
+            else
+            {
+
+                <div class="empty-state">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    <p class="mb-0">
+
+                        No course enrollment data available.
+
+                    </p>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,574 @@
+﻿@model Student_Mangement_System.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    .dashboard-card {
+        background: #1f2327;
+        border: 1px solid #343a40;
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+    .dashboard-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+    }
+
+    .icon-blue {
+        background: rgba(13, 110, 253, 0.15);
+        color: #0d6efd;
+    }
+
+    .icon-green {
+        background: rgba(25, 135, 84, 0.15);
+        color: #198754;
+    }
+
+    .icon-yellow {
+        background: rgba(255, 193, 7, 0.15);
+        color: #ffc107;
+    }
+
+    .icon-purple {
+        background: rgba(111, 66, 193, 0.15);
+        color: #8b6bd8;
+    }
+
+    .icon-cyan {
+        background: rgba(13, 202, 240, 0.15);
+        color: #0dcaf0;
+    }
+
+    .report-card {
+        background: #1f2327;
+        border: 1px solid #343a40;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .report-card .card-header {
+            background: #292e33;
+            color: #f8f9fa;
+            border-bottom: 1px solid #343a40;
+        }
+
+        .report-card .card-body {
+            background: #1f2327;
+        }
+
+    .report-table {
+        color: #f8f9fa;
+        margin-bottom: 0;
+    }
+
+        .report-table thead th {
+            color: #adb5bd;
+            border-bottom: 1px solid #495057;
+        }
+
+        .report-table tbody td {
+            border-color: #343a40;
+            vertical-align: middle;
+        }
+
+        .report-table tbody tr:hover {
+            background: #292e33;
+        }
+
+    .student-badge {
+        background: #f8f9fa;
+        color: #212529;
+        padding: 5px 9px;
+        border-radius: 6px;
+        margin-right: 5px;
+        margin-bottom: 4px;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .welcome-text {
+        color: #adb5bd;
+    }
+
+    .count-number {
+        font-size: 30px;
+        font-weight: 700;
+        color: #ffffff;
+    }
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="row mb-4">
+
+        <div class="col-md-8">
+
+            <h2 class="fw-bold text-white mb-1">
+                Dashboard
+            </h2>
+
+            <p class="welcome-text mb-0">
+                Welcome back! Here's an overview of your student management system.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card dashboard-card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <p class="text-muted mb-2">
+                                Total Students
+                            </p>
+
+                            <div class="count-number">
+                                @Model.TotalStudents
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-icon icon-blue">
+
+                            <i class="bi bi-people-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card dashboard-card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <p class="text-muted mb-2">
+                                Total Courses
+                            </p>
+
+                            <div class="count-number">
+                                @Model.TotalCourses
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-icon icon-yellow">
+
+                            <i class="bi bi-book-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card dashboard-card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <p class="text-muted mb-2">
+                                Total Teachers
+                            </p>
+
+                            <div class="count-number">
+                                @Model.TotalTeachers
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-icon icon-green">
+
+                            <i class="bi bi-person-badge-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card dashboard-card h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <p class="text-muted mb-2">
+                                Departments
+                            </p>
+
+                            <div class="count-number">
+                                @Model.TotalDepartments
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-icon icon-purple">
+
+                            <i class="bi bi-building-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mb-4">
+
+        <div class="col-md-12">
+
+            <div class="card dashboard-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center">
+
+                        <div class="dashboard-icon icon-cyan me-3">
+
+                            <i class="bi bi-journal-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Total Enrollments
+                            </p>
+
+                            <h3 class="fw-bold text-white mb-0">
+
+                                @Model.TotalEnrollments
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card report-card shadow-sm mb-4">
+
+
+        <div class="card-header py-3">
+
+            <h5 class="mb-0 fw-bold">
+
+                <i class="bi bi-building me-2 text-primary"></i>
+
+                Department-wise Student Report
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            @if (Model.DepartmentReport != null &&
+                 Model.DepartmentReport.Any())
+            {
+
+                <div class="table-responsive">
+
+                    <table class="table report-table table-hover">
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width:80px;">
+                                    #
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th>
+                                    Students
+                                </th>
+
+                                <th>
+                                    Student Count
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @{
+                                int departmentNumber = 1;
+                            }
+
+                            @foreach (var department in Model.DepartmentReport)
+                            {
+
+                                <tr>
+
+                                    <td>
+                                        @departmentNumber
+                                    </td>
+
+                                    <td>
+
+                                        <span class="fw-semibold">
+
+                                            @department.DepartmentName
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (department.StudentNames != null &&
+                                             department.StudentNames.Any())
+                                        {
+
+                                            @foreach (var student in department.StudentNames)
+                                            {
+
+                                                <span class="student-badge">
+
+                                                    @student
+
+                                                </span>
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+
+                                            <span class="text-muted">
+                                                No students
+                                            </span>
+
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge bg-primary px-3 py-2">
+
+                                            @department.StudentCount
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                departmentNumber++;
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            }
+            else
+            {
+
+                <div class="text-center text-muted py-4">
+
+                    <i class="bi bi-info-circle fs-3"></i>
+
+                    <p class="mb-0 mt-2">
+                        No department data available.
+                    </p>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+    <div class="card report-card shadow-sm mb-4">
+
+
+        <div class="card-header py-3">
+
+            <h5 class="mb-0 fw-bold">
+
+                <i class="bi bi-book me-2 text-warning"></i>
+
+                Course-wise Enrollment Report
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            @if (Model.CourseReport != null &&
+                 Model.CourseReport.Any())
+            {
+
+                <div class="table-responsive">
+
+                    <table class="table report-table table-hover">
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width:80px;">
+                                    #
+                                </th>
+
+                                <th>
+                                    Course
+                                </th>
+
+                                <th>
+                                    Enrollment Count
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @{
+                                int courseNumber = 1;
+                            }
+
+                            @foreach (var course in Model.CourseReport)
+                            {
+
+                                <tr>
+
+                                    <td>
+                                        @courseNumber
+                                    </td>
+
+                                    <td>
+
+                                        <span class="fw-semibold">
+
+                                            @course.CourseName
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge bg-success px-3 py-2">
+
+                                            @course.EnrollmentCount
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                courseNumber++;
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            }
+            else
+            {
+
+                <div class="text-center text-muted py-4">
+
+                    <i class="bi bi-info-circle fs-3"></i>
+
+                    <p class="mb-0 mt-2">
+                        No course enrollment data available.
+                    </p>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
