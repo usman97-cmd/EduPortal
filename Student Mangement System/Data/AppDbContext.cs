@@ -81,6 +81,7 @@ namespace Student_Mangement_System.Data
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<Fee> Fees { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }
