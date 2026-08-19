@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model Student_Mangement_System.ViewModels.RegisterViewModel
 
 @{
     ViewData["Title"] = "Register";
@@ -21,6 +21,7 @@
                     <form asp-action="Register" method="post">
 
                         <div class="mb-3">
+
                             <label asp-for="Name" class="form-label">
                                 Name
                             </label>
@@ -31,10 +32,12 @@
                             <span asp-validation-for="Name"
                                   class="text-danger">
                             </span>
+
                         </div>
 
 
                         <div class="mb-3">
+
                             <label asp-for="Email" class="form-label">
                                 Email
                             </label>
@@ -45,10 +48,12 @@
                             <span asp-validation-for="Email"
                                   class="text-danger">
                             </span>
+
                         </div>
 
 
                         <div class="mb-3">
+
                             <label asp-for="Username" class="form-label">
                                 Username
                             </label>
@@ -59,10 +64,12 @@
                             <span asp-validation-for="Username"
                                   class="text-danger">
                             </span>
+
                         </div>
 
 
                         <div class="mb-3">
+
                             <label asp-for="Password" class="form-label">
                                 Password
                             </label>
@@ -74,6 +81,7 @@
                             <span asp-validation-for="Password"
                                   class="text-danger">
                             </span>
+
                         </div>
 
 
