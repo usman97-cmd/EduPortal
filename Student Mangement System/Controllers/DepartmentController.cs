@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Student_Mangement_System.Data;
 using Student_Mangement_System.Models;
+using Student_Mangement_System.Services;
 
 namespace Student_Mangement_System.Controllers
 {
-    public class DepartmentController(AppDbContext context) : Controller
+    [Authorize(Roles = "Admin")]
+    public class DepartmentController(IDepartmentService departmentService) : Controller
     {
         public IActionResult Index()
         {
-            var departments = context.Departments.ToList();
+            var departments = departmentService.GetAll();
             return View(departments);
         }
 
@@ -21,15 +24,14 @@ namespace Student_Mangement_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Departments.Add(department);
-                context.SaveChanges();
+                departmentService.Create(department);
                 return RedirectToAction("Index");
             }
             return View(department);
         }
         public IActionResult Edit(int id)
         {
-            var department = context.Departments.Find(id);
+            var department = departmentService.Getbyid(id);
             if (department == null)
             {
                 return NotFound();
@@ -41,15 +43,14 @@ namespace Student_Mangement_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Departments.Update(department);
-                context.SaveChanges();
+                departmentService.Update(department);
                 return RedirectToAction("Index");
             }
             return View(department);
         }
         public IActionResult Delete(int id)
         {
-            var department = context.Departments.Find(id);
+            var department = departmentService.Getbyid(id);
             if (department == null)
             {
                 return NotFound();
@@ -59,8 +60,8 @@ namespace Student_Mangement_System.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
-                var department = context.Departments.Find(id);
-                if(department == null)
+                var department = departmentService.Getbyid(id);
+            if (department == null)
                 {
                 return Json(new
                 {
@@ -69,8 +70,7 @@ namespace Student_Mangement_System.Controllers
 
                 });
                 }
-             context.Departments.Remove(department);
-             context.SaveChanges();
+            departmentService.Delete(id);
             return Json(new { 
                 success = true,
                 message ="Department deleted successfully."

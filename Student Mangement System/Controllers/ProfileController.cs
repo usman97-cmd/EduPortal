@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Student_Mangement_System.ViewModels;
 
 namespace Student_Mangement_System.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         public IActionResult Index()

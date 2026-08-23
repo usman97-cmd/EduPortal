@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Student_Mangement_System.Data;
 using Student_Mangement_System.ViewModels;
 
 namespace Student_Mangement_System.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ReportController(AppDbContext context) : Controller
     {
         public IActionResult Index()

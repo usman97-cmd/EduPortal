@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Student_Mangement_System.Data;
@@ -8,6 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Student_Mangement_System.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class StudentController(AppDbContext context) : Controller
     {
         public IActionResult Index()

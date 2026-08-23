@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Student_Mangement_System.Data;
@@ -6,6 +7,7 @@ using Student_Mangement_System.Models;
 
 namespace Student_Mangement_System.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class CourseController(AppDbContext context): Controller
     {
         public IActionResult Index()

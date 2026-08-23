@@ -4,12 +4,19 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Student_Mangement_System.Data;
+using Student_Mangement_System.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IAccountService, AccountService>();
+
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString(
         "DefaultConnection"
         )));
+
 // Add services to the container.
 builder.Services.AddControllersWithViews(
     options =>
@@ -21,7 +28,7 @@ builder.Services.AddControllersWithViews(
         options.Filters.Add(new
             AuthorizeFilter(policy));
     });
-
+//Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/Account/login";
@@ -36,14 +43,12 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-
-
-
-
 app.UseHttpsRedirection();
+
 app.UseRouting();
+
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapStaticAssets();
