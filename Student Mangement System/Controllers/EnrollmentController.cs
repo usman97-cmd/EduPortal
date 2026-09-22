@@ -4,30 +4,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Student_Mangement_System.Data;
 using Student_Mangement_System.Models;
+using Student_Mangement_System.Services;
 
 namespace Student_Mangement_System.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class EnrollmentController(AppDbContext context) : Controller
+    public class EnrollmentController(IEnrollmentService enrollmentService) : Controller
     {
         public IActionResult Index()
         {
-            var enrollment = context.Enrollments
-                          .Include(s => s.Student)
-                          .Include(c => c.Course)
-                          .ToList();
+            var enrollment = enrollmentService.GetAll();
             return View(enrollment);
         }
         public IActionResult Create()
         {
             ViewBag.Students = new SelectList(
-                context.Students,
+                enrollmentService.GetAllStudents(),
                 "Id",
                 "FirstName"
             );
             ViewBag.Courses = new SelectList
                 (
-                   context.Courses,
+                   enrollmentService.GetAllCourses(),
                    "Id",
                    "CourseName"
                 );
@@ -39,18 +37,17 @@ namespace Student_Mangement_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Enrollments.Add(enrollment);
-                context.SaveChanges();
+               enrollmentService.Create(enrollment);
                 return RedirectToAction("Index");
             }
             ViewBag.Students = new SelectList(
-               context.Students,
+               enrollmentService.GetAllStudents(),
                "Id",
                "FirstName"
            );
             ViewBag.Courses = new SelectList
                 (
-                   context.Courses,
+                   enrollmentService.GetAllCourses(),
                    "Id",
                    "CourseName"
                 );
@@ -58,7 +55,7 @@ namespace Student_Mangement_System.Controllers
         }
         public IActionResult Edit(int id)
         {
-            var enrollment = context.Enrollments.Find(id);
+            var enrollment = enrollmentService.Getbyid(id);
 
             if (enrollment == null)
             {
@@ -66,14 +63,14 @@ namespace Student_Mangement_System.Controllers
             }
 
             ViewBag.Students = new SelectList(
-                context.Students,
+                enrollmentService.GetAllStudents(),
                 "Id",
                 "FirstName",
                 enrollment.StudentId
             );
 
             ViewBag.Courses = new SelectList(
-                context.Courses,
+                enrollmentService.GetAllCourses(),
                 "Id",
                 "CourseName",
                 enrollment.CourseId
@@ -86,21 +83,20 @@ namespace Student_Mangement_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Enrollments.Update(enrollment);
-                context.SaveChanges();
+                enrollmentService.Update(enrollment);
 
                 return RedirectToAction("Index");
             }
 
             ViewBag.Students = new SelectList(
-                context.Students,
+               enrollmentService.GetAllStudents(),
                 "Id",
                 "FirstName",
                 enrollment.StudentId
             );
 
             ViewBag.Courses = new SelectList(
-                context.Courses,
+                enrollmentService.GetAllCourses(),
                 "Id",
                 "CourseName",
                 enrollment.CourseId
@@ -111,8 +107,7 @@ namespace Student_Mangement_System.Controllers
         [HttpDelete]
         public IActionResult DeleteConfirmed(int id)
         {
-            var enrollment = context.Enrollments.Find(id);
-
+            var enrollment = enrollmentService.Getbyid(id);
             if (enrollment == null)
             {
                 return Json(new
@@ -122,8 +117,7 @@ namespace Student_Mangement_System.Controllers
                 });
             }
 
-            context.Enrollments.Remove(enrollment);
-            context.SaveChanges();
+            enrollmentService.Delete(id);
 
             return Json(new
             {

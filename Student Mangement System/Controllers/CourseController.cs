@@ -4,23 +4,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Student_Mangement_System.Data;
 using Student_Mangement_System.Models;
+using Student_Mangement_System.Services;
 
 namespace Student_Mangement_System.Controllers
 {
     [Authorize(Roles ="Admin")]
-    public class CourseController(AppDbContext context): Controller
+    public class CourseController(ICourseService courseService): Controller
     {
         public IActionResult Index()
         {
-            var courses = context.Courses
-                          .Include(s => s.Department)
-                          .ToList();
+            var courses = courseService.GetCourses();
             return View(courses);
         }
         public IActionResult Create()
         {
             ViewBag.Departments = new SelectList(
-               context.Departments,
+               courseService.GetDepartments(),
                "Id",
                "Name"
                );
@@ -31,12 +30,11 @@ namespace Student_Mangement_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Courses.Add(course);
-                context.SaveChanges();
+                courseService.Create(course);
                 return RedirectToAction("Index");
             }
             ViewBag.Departments = new SelectList(
-              context.Departments,
+             courseService.GetDepartments(),
               "Id",
               "Name"
               );
@@ -45,13 +43,13 @@ namespace Student_Mangement_System.Controllers
         }
         public IActionResult Edit(int id)
         {
-            var courses = context.Courses.Find(id);
+            var courses = courseService.Getbyid(id);
             if( courses == null)
             {
                 return NotFound();
             }
             ViewBag.Department = new SelectList(
-                context.Departments,
+                courseService.GetDepartments(),
                 "Id",
                 "Name",
                 courses.DepartmentId
@@ -63,12 +61,11 @@ namespace Student_Mangement_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Courses.Update(course);
-                context.SaveChanges();
+                courseService.Update(course);
                 return RedirectToAction("Index");
             }
             ViewBag.Department = new SelectList(
-                context.Departments,
+               courseService.GetDepartments(),
                 "Id",
                 "Name",
                 course.DepartmentId
@@ -77,14 +74,14 @@ namespace Student_Mangement_System.Controllers
 
         }
         public IActionResult Delete(int id) 
-        { 
-            var course = context.Courses.Find( id );
+        {
+            var course = courseService.Getbyid(id);
             if (course == null)
             {
                 return NotFound();
             }
             ViewBag.Department = new SelectList(
-                context.Departments,
+              courseService.GetDepartments(),
                 "Id",
                 "Name",
                 course.DepartmentId
@@ -92,8 +89,8 @@ namespace Student_Mangement_System.Controllers
             return View(course);
         }
         [HttpPost]
-        public IActionResult DeleteConfirmed(int id) { 
-            var course = context.Courses.Find(id);
+        public IActionResult DeleteConfirmed(int id) {
+            var course = courseService.Getbyid(id);
             if (course == null) {
                 return Json(new
                 {
@@ -102,8 +99,7 @@ namespace Student_Mangement_System.Controllers
 
                 });
             }
-            context.Courses.Remove(course);
-            context.SaveChanges();
+            courseService.Delete(id);
             return Json (new
             {
                 success = true,

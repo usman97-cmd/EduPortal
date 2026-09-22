@@ -4,26 +4,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Student_Mangement_System.Data;
 using Student_Mangement_System.Models;
+using Student_Mangement_System.Services;
+using Student_Mangement_System.ViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Student_Mangement_System.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class StudentController(AppDbContext context) : Controller
+    public class StudentController(IStudentService studentService) : Controller
     {
         public IActionResult Index()
         {
-            var student = context.Students
-                         .Include(s => s.Department)
-                         .ToList();
+            var student = studentService.Getall();
             return View(student);
         }
         
         public IActionResult Create()
         {
             ViewBag.Departments = new SelectList(
-                  context.Departments,
+                  studentService.GetDepartments(),
                   "Id",
                   "Name"
             );
@@ -33,7 +32,7 @@ namespace Student_Mangement_System.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Student student)
+        public async Task <IActionResult> Create(StudentCreateViewModel vm)
         {
             if (!ModelState.IsValid)
             {
@@ -48,14 +47,13 @@ namespace Student_Mangement_System.Controllers
                 return Json(errors);
             }
 
-            context.Students.Add(student);
-            context.SaveChanges();
+            await studentService.Create(vm);
 
             return RedirectToAction("Index");
         }
         public IActionResult Edit(int id)
         {
-            var student = context.Students.Find(id);
+            var student = studentService.Getbyid(id);
 
             if (student == null)
             {
@@ -63,7 +61,7 @@ namespace Student_Mangement_System.Controllers
             }
 
             ViewBag.Departments = new SelectList(
-                context.Departments,
+                studentService.GetDepartments(),
                 "Id",
                 "Name",
                 student.DepartmentId
@@ -74,52 +72,28 @@ namespace Student_Mangement_System.Controllers
         [HttpPost]
         public IActionResult Edit(Student student)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
-                context.Students.Update(student);
-                context.SaveChanges();
+                studentService.Update(student);
                 return RedirectToAction("Index");
             }
             ViewBag.Departments = new SelectList(
-                context.Departments,
+                studentService.GetDepartments(),
                 "Id",
                 "Name",
                 student.DepartmentId
             );
             return View(student);
         }
-        public IActionResult Delete(int id)
-        {
-            var student = context.Students
-              .Include(s => s.Department)
-              .FirstOrDefault(s => s.Id == id);
-            if (student == null)
-            {
-                return NotFound();
-            }
-            return View(student);
-        }
-        [HttpPost,ActionName("Delete")]
+        [HttpPost]
         public IActionResult DeleteConfirmed(int id)
         {
-            var student = context.Students.Find(id);
-
-            if (student == null)
-            {
-                return Json(new
-                {
-                    success = false,
-                    message = "Student not found."
-                });
-            }
-
-            context.Students.Remove(student);
-            context.SaveChanges();
+            var result = studentService.Delete(id);
 
             return Json(new
             {
-                success = true,
-                message = "Student deleted successfully."
+                success = result.Success,
+                message = result.Message
             });
         }
 

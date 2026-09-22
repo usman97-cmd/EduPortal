@@ -3,23 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Student_Mangement_System.Data;
+using Student_Mangement_System.Services;
 
 namespace Student_Mangement_System.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class TeacherController (AppDbContext context): Controller
+    public class TeacherController (ITeacherService teacherService): Controller
     {
         public IActionResult Index()
         {
-            var Teacher = context.Teachers.
-                          Include(d =>d.Department)
-                          .ToList();
+            var Teacher = teacherService.Getall();
             return View(Teacher);
         }
         public IActionResult Create()
         {
             ViewBag.Departments = new SelectList(
-                context.Departments,
+                teacherService.GetDepartments(),
                 "Id",
                 "Name"
                 );
@@ -30,12 +29,11 @@ namespace Student_Mangement_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Teachers.Add(teacher);
-                context.SaveChanges();
+                teacherService.Create(teacher);
                 return RedirectToAction("Index");
             }
             ViewBag.Departments = new SelectList(
-               context.Departments,
+              teacherService.GetDepartments(),
                "Id",
                "Name" 
            );
@@ -43,14 +41,14 @@ namespace Student_Mangement_System.Controllers
         }
         public IActionResult Edit(int id)
         {
-            var Teacher = context.Teachers.Find(id);
+            var Teacher = teacherService.Getbyid(id);
             if (Teacher == null)
             {
                 return NotFound();
             }
             ViewBag.Departments = new SelectList
                 (
-                context.Departments,
+                teacherService.GetDepartments(),
                 "Id",
                 "Name",
                 Teacher.DepartmentId
@@ -62,12 +60,11 @@ namespace Student_Mangement_System.Controllers
         {
             if (ModelState.IsValid) 
             {
-                context.Teachers.Update(teacher);
-                context.SaveChanges();
+                teacherService.Update(teacher);
                 return RedirectToAction("Index");
             }
             ViewBag.Departments = new SelectList(
-               context.Departments,
+               teacherService.GetDepartments(),
                "Id",
                "Name",
                teacher.DepartmentId
@@ -76,10 +73,8 @@ namespace Student_Mangement_System.Controllers
         }
         public IActionResult Delete(int id)
         {
-            var teacher = context.Teachers
-                          .Include(s => s.Department)
-                          .FirstOrDefault(s => s.Id == id);
-            if(teacher == null)
+            var teacher = teacherService.Getbyid(id);
+            if (teacher == null)
             {
                 return NotFound();
             }
@@ -89,7 +84,7 @@ namespace Student_Mangement_System.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
-            var teacher = context.Teachers.Find(id);
+            var teacher = teacherService.Getbyid(id);
 
             if (teacher == null)
             {
@@ -100,8 +95,7 @@ namespace Student_Mangement_System.Controllers
                 });
             }
 
-            context.Teachers.Remove(teacher);
-            context.SaveChanges();
+            teacherService.Delete(id);
 
             return Json(new
             {

@@ -1,4 +1,5 @@
-﻿@model Student
+﻿@using Student_Mangement_System.ViewModels
+@model StudentCreateViewModel
 
 @{
     ViewData["Title"] = "Create Student";
@@ -35,7 +36,7 @@
                 <h3 class="card-title">Student Information</h3>
             </div>
 
-            <form asp-action="Create" method="post">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
 
                 <div class="card-body">
 
@@ -120,7 +121,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label asp-for="Photo" class="form-label"></label>
-                            <input asp-for="Photo" class="form-control" />
+                            <input asp-for="Photo" type="file" class="form-control" />
                         </div>
 
                         <div class="col-md-6 mb-3 d-flex align-items-center">

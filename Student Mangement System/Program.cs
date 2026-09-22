@@ -9,13 +9,18 @@ using Student_Mangement_System.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAccountService, AccountService>();
-
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString(
         "DefaultConnection"
-        )));
+        
+    )
+));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(
